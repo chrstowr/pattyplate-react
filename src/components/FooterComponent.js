@@ -25,8 +25,8 @@ function Footer(props) {
                     </div>
                     <div className="col-sm-4 text-center">
                         <h5 className="text-light">Contact</h5>
-                        <a role="button" class="btn btn-link" href="mailto:chris.t@pattyplate.com">
-                            <i class="fa fa-envelope-o fa-lg text-primary"></i>
+                        <a role="button" className="btn btn-link" href="mailto:chris.t@pattyplate.com">
+                            <i className="fa fa-envelope-o fa-lg text-primary"></i>
                             chris.t@pattyplate.com
                         </a>
                     </div>
