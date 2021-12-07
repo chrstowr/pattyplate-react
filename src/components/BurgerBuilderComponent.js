@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container, Card, CardImg, CardBody, Row, Col } from 'reactstrap';
-import CardHeader from 'reactstrap/lib/CardHeader';
+import { Button, Container, Card, CardHeader, CardImg, CardBody, Row, Col } from 'reactstrap';
 
 function GetIngredientByCategory(ingredients) {
     let categories = [];
@@ -21,7 +20,7 @@ function GetIngredientByCategory(ingredients) {
         i.li = ingredients.filter(e => e.type === i.type);
     });
 
-    // Add state data to track whether an item is selected
+    // Add an index that is used to track select state
     categories.forEach(i => {
         i.li.forEach(j => {
             j['index'] = ingredientIndex;
@@ -48,27 +47,39 @@ function CreateSelectState(iState) {
 
 function BurgerBuilder(props) {
     const [ingredientState, updateIngredientState] = React.useState(GetIngredientByCategory(props.ingredients));
-    const [orderState, updateOrder] = React.useState({});
     const [selectState, toggleSelect] = React.useState(CreateSelectState(ingredientState));
+    const [orderState, updateOrder] = React.useState([]);
 
     const handleParentToggle = (obj) => {
-        let oldState = [...selectState];
-        oldState[obj.index] = !oldState[obj.index];
-        toggleSelect([...oldState]);
+        let newSelectState = [...selectState];
+        newSelectState[obj.index] = !newSelectState[obj.index];
+        toggleSelect([...newSelectState]);
 
         //send update to order state
+        if(orderState.filter(i => i.id === obj.id).length < 1){
+            console.log("Add");
+            updateOrder(curr => [...curr, obj]);
+        }else{
+            console.log("Remove");
+            let newOrderState = [...orderState];
+            let indexToRemove = newOrderState.indexOf(obj);
+            newOrderState.splice(indexToRemove, 1);
+            updateOrder(newOrderState);
+        }
     }
 
+    useEffect(() => console.log("OrderState: " + JSON.stringify(orderState)), [orderState])
 
+      {/*className="square-placeholder"*/}
     function RenderBuildersByCategory(cat, selectState) {
         let builders = null;
         ingredientState.forEach(i => {
             if (i.type === cat) {
                 builders = i.li.map(j => {
                     return (
-                        <Col>
-                            <Card key={j.index} className={`builder-item-parent ${selectState[j.index] ? "builder-selected" : ""}`} onClick={() => handleParentToggle(j)}>
-                                <CardImg className="square-placeholder" alt="placeholder.png" />
+                        <Col key={j.index} >
+                            <Card className={`builder-item-parent ${selectState[j.index] ? "builder-selected" : ""}`} onClick={() => handleParentToggle(j)}>
+                                <CardImg src='./shared/assets/images/bb_placeholder.png' alt="placeholder.png" />
                                 <CardBody>
                                     <div>
                                         {j.name}
@@ -77,7 +88,6 @@ function BurgerBuilder(props) {
                             </Card>
                         </Col>);
                 })
-                console.log(builders);
             }
         })
 
@@ -110,8 +120,8 @@ function BurgerBuilder(props) {
                 {RenderBuildersByCategory("topping", selectState)}
             </Row>
             <Row>
-                <Col>
-                    <Card key={99} className="builder-item-parent">
+                <Col key={99} >
+                    <Card className="builder-item-parent">
                         <CardBody>
                             <CardHeader>Your Order:</CardHeader>
                             <CardBody></CardBody>
