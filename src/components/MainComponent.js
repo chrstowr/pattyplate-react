@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Switch, Route, Redirect} from 'react-router-dom';
-import {MENUDATA} from '../shared/menu';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { HISTORY } from '../shared/history';
+import { MENUDATA } from '../shared/menu';
 import { INGREDIENTS } from '../shared/ingredients'
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
@@ -12,7 +13,7 @@ import BurgerBuilder from './BurgerBuilderComponent';
 
 class Main extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {};
     }
@@ -23,7 +24,7 @@ class Main extends Component {
             <div>
                 <Header />
                 <Switch>
-                    <Route path='/home' component={Home}/>
+                    <Route path='/home' render={() => <Home history={HISTORY} />} />
                     <Route path='/menu' render={() => <Menu ingredients={INGREDIENTS} menu={MENUDATA} />} />
                     <Route path='/requeststop' component={RequestStop} />
                     <Route path='/burgerbuilder' render={() => <BurgerBuilder ingredients={INGREDIENTS} />} />
