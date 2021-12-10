@@ -70,7 +70,11 @@ h2 {
 }
 
 .builder-item-parent {
-  width: 250px;
+  width: 200px;
+}
+
+.order-summary-parent {
+  width: 350px;
 }
 
 .builder-selected {

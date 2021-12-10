@@ -5,6 +5,16 @@ import Geocode from "react-geocode";
 
 const Map = (props) => {
 
+    const mapStyles = {
+        height: "400px",
+        width: "auto"
+    };
+
+    const defaultCenter = {
+        lat: 29.422237479297216, lng: -98.48144546720194
+    }
+
+
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS
@@ -32,14 +42,9 @@ const Map = (props) => {
         });
     }, [props.history])
 
-    const mapStyles = {
-        height: "400px",
-        width: "auto"
-    };
 
-    const defaultCenter = {
-        lat: 29.422237479297216, lng: -98.48144546720194
-    }
+    if(props.historyIsLoading || props.errMess) 
+        return <div/>;
 
     return isLoaded ? (
         <GoogleMap
@@ -56,7 +61,7 @@ const Map = (props) => {
                 })
             }
         </GoogleMap>
-    ) : <div>Loading...</div>
+    ) : <div/>
 }
 
 export default Map;
