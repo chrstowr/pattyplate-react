@@ -1,10 +1,14 @@
 import React from 'react';
-import {Spinner} from 'reactstrap';
+import ReactLoading from 'react-loading';
 
-export const Loading = (props) => {
+export const Loading = (props) => { 
     return (
-        <div className="col mx-auto my-auto">
-            <Spinner color="success">Loading...</Spinner>
+        <div className="col">
+                <ReactLoading 
+                    type={props.type ? props.type : 'balls'} 
+                    color={props.color ? props.color : '#ffffff'} 
+                    height={props.height ? props.height : 600} 
+                    width={props.width ? props.width : 600} />
         </div>
     );
 };

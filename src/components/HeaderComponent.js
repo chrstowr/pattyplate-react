@@ -43,7 +43,7 @@ class Header extends Component {
 
                 <Navbar dark sticky="top" expand="md">
                     <div className="container">
-                        <NavbarBrand className="mr-auto" href="/">Patty Plate</NavbarBrand>
+                        <NavbarBrand className="ml-auto" href="/">Patty Plate</NavbarBrand>
                         <NavbarToggler onClick={this.toggleNav} />
                         <Collapse isOpen={this.state.isNavOpen} navbar>
                             <Nav navbar>
@@ -65,6 +65,11 @@ class Header extends Component {
                                 <NavItem>
                                     <NavLink className="nav-link" to="/requeststop">
                                         <i className="fa fa-info fa-lg" /> Request Stop
+                                    </NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink className="nav-link" to="/componentsort">
+                                        <i className="fa fa-info fa-lg" /> Sort
                                     </NavLink>
                                 </NavItem>
                             </Nav>
