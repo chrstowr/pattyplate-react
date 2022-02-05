@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "@fontsource/open-sans";
 import './App.css';
 import { BrowserRouter } from 'react-router-dom';
 import Main from './components/MainComponent';

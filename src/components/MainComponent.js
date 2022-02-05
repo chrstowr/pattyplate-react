@@ -8,7 +8,6 @@ import Footer from './FooterComponent';
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import RequestStop from './RequestStopComponent';
-import ComponentSort from './ComponentSort'
 import BurgerBuilder from './BurgerBuilderComponent';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
@@ -44,16 +43,15 @@ class Main extends Component {
 
         return (
             <div>
-                <Header />
+                {/* <Header /> */}
                 <Switch>
                     <Route path='/home' component={HomePage} />
                     <Route path='/menu' render={() => <Menu ingredients={INGREDIENTS} menu={MENUDATA} />} />
                     <Route path='/requeststop' component={RequestStop} />
                     <Route path='/burgerbuilder' render={() => <BurgerBuilder ingredients={INGREDIENTS} />} />
-                    <Route path='/componentsort' component={ComponentSort} />
                     <Redirect to='/home' />
                 </Switch>
-                <Footer />
+                {/* <Footer /> */}
             </div>
         );
     };
