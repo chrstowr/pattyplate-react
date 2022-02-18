@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Geocode from "react-geocode";
+import truck_icon from "../images/food-truck.png"
+
+const red_marker = "https://maps.google.com/mapfiles/ms/icons/red.png";
 
 const Map = props => {
-  const mapStyles = {
-    height: "400px",
-    width: "auto"
-  };
+
 
   const defaultCenter = {
     lat: 29.422237479297216,
@@ -21,6 +21,7 @@ const Map = props => {
   const [locationData, updateLocationData] = useState([]);
   useEffect(
     () => {
+      console.log(props.history)
       //Flush location state
       updateLocationData([]);
       // Resolve addresses to lat/lng for use in map
@@ -38,8 +39,8 @@ const Map = props => {
         return Geocode.fromAddress(address).then(
           response => {
             const { lat, lng } = response.results[0].geometry.location;
-            updateLocationData(current => [...current, { lat, lng }]);
-            console.log(`Adding: {${lat}, ${lng}}`);
+            updateLocationData(current => [...current, {id: point.id, position: { lat, lng }}]);
+            //console.log(`Adding: {${lat}, ${lng}}`);
           },
           error => {
             console.error(error);
@@ -55,7 +56,7 @@ const Map = props => {
   return isLoaded
     ? <GoogleMap
         className="mx-auto"
-        mapContainerStyle={mapStyles}
+        mapContainerClassName="map"
         zoom={9}
         center={defaultCenter}
       >
@@ -64,8 +65,8 @@ const Map = props => {
           return (
             <Marker
               key={i}
-              position={item}
-              label={props.bounce[i] ? null : `${i}`}
+              icon={item.id === 0 ? truck_icon : red_marker}
+              position={item.position}
               animation={props.bounce[i] ? 1 : 0}
             />
           );
