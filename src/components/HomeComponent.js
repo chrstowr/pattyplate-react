@@ -1,8 +1,8 @@
 import React from "react";
-import Map from "./MapComponent";
-import { Row, Col, Container, Card, CardBody } from "reactstrap";
+import LocationList from "./LocationListComponent";
+import Menu from "./MenuComponent";
 import { Loading } from "./LoadingComponent";
-import logo from "../images/logo.png";
+import logo from "../images/TBC-Logo.svg";
 
 function Home(props) {
   const [bounceState, updateBounceState] = React.useState(
@@ -30,82 +30,8 @@ function Home(props) {
   };
 
   const Logo = () => {
-    return (
-      <img className="logo" src={logo} alt="logo"/>
-    );
+    return <img className="logo" src={logo} alt="logo" />;
   };
-
-  const RenderLocationList = ({ history, isLoading, errMess }) => {
-    if (isLoading || errMess) {
-      return <div />;
-    }
-
-    return history.map((i, index) => {
-      return (
-        <Card
-          key={index}
-          className="mx-auto"
-          onClick={() => handleCardClick(index)}
-        >
-          <Container>
-            <Row>
-              <Col
-                xs="2"
-                className="mx-auto my-auto"
-                style={{ backgroundColor: "yellow" }}
-              >
-                {index}
-              </Col>
-              <Col xs="10">
-                <CardBody>
-                  <div>
-                    {i.title}
-                  </div>
-                  <address>
-                    {i.address}
-                    <br /> {i.city}, {i.state} {i.zip}
-                  </address>
-                  <div>
-                    On {i.date}
-                  </div>
-                  <div>
-                    {" "}@ {i.hours}
-                  </div>
-                </CardBody>
-              </Col>
-            </Row>
-          </Container>
-        </Card>
-      );
-    });
-  };
-
-  {
-    /* <Row>
-          <Col className="blur-bg" style={{height:"auto", width:"auto"}} xs="12">
-            <div className="jumbotron jumbotron-fluid">
-              <div>Test text</div>
-            </div>
-          </Col>
-        </Row>
-        <Row className="mt-5 mb-5">
-          <Col xs="12" lg="8">
-            <Map
-              history={props.history}
-              historyIsLoading={props.historyLoading}
-              errMess={props.historyFailed}
-              bounce={bounceState}
-            />
-          </Col>
-          <Col>
-            <RenderLocationList
-              history={props.history}
-              isLoading={props.historyLoading}
-              errMess={props.historyFailed}
-            />
-          </Col>
-        </Row> */
-  }
 
   return props.historyLoading
     ? <Loading />
@@ -117,17 +43,23 @@ function Home(props) {
           </div>
         </section>
         <section id="sec1" className="section-1 menu-svg">
-          <h1>Menu</h1>
-          <div className="container" />
+          <div className="container">
+            <Menu
+              menu={props.menu}
+              menuIsLoading={props.menuLoading}
+              menuErrMess={props.menuFailed}
+              ingredient={props.ingredient}
+              ingredientIsLoading={props.ingredientLoading}
+              ingredientErrMess={props.ingredientFailed}
+            />
+          </div>
         </section>
         <section id="sec2" className="section-2 req-stop-svg">
           <div>
-            <h1>Next Stop</h1>
-            <Map
+            <LocationList
               history={props.history}
               historyIsLoading={props.historyLoading}
               errMess={props.historyFailed}
-              bounce={bounceState}
             />
           </div>
         </section>
