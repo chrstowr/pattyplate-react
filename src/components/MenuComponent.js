@@ -1,6 +1,11 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import { baseUrl } from "../shared/baseUrl";
+import {
+  LazyLoadImage,
+  trackWindowScroll
+} from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/opacity.css";
 
 function currencyFormat(number) {
   let formatter = new Intl.NumberFormat("en-US", {
@@ -39,20 +44,36 @@ const BuilderCards = ({ ingredients, isLoading, errMess }) => {
           style={{
             width: "70vw",
             maxWidth: "20rem",
-            backgroundColor: "#424242",
+            backgroundColor: "#fff",
             border: "1px solid #000"
           }}
           key={category.name + "-card-" + index}
         >
-          <Card.Img
+          {/* <Card.Img
             style={{
               width: "100%",
               height: "12em",
               objectFit: "cover",
-              objectPosition: "center"
+              objectPosition: "center",
+              borderBottom: "1px solid #888"
             }}
             variant="top"
             src={baseUrl + category.image}
+          /> */}
+          <LazyLoadImage
+            src={baseUrl + category.image}
+            alt={"image alt"}
+            wrapperClassName="Card.Img"
+            wrapperProps={{ variant: "top" }}
+            effect="opacity"
+            delayTime={3000}
+            style={{
+              width: "100%",
+              height: "12em",
+              objectFit: "cover",
+              objectPosition: "center",
+              borderBottom: "1px solid #888"
+            }}
           />
           <Card.ImgOverlay
             style={{
@@ -67,6 +88,7 @@ const BuilderCards = ({ ingredients, isLoading, errMess }) => {
                 fontSize: "calc(2vw + 2vh)",
                 color: "white",
                 fontWeight: "bold",
+                colorBackground: "rgb(0,0,0,50)",
                 textShadow:
                   "-1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000,-1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000"
               }}
@@ -87,7 +109,7 @@ const BuilderCards = ({ ingredients, isLoading, errMess }) => {
               return (
                 <div
                   key={"ingredient-item-" + d.id + "-" + index}
-                  style={{ fontSize: "1.25rem", color: "white" }}
+                  style={{ fontSize: "1.25rem", color: "black" }}
                 >
                   {d.name} - {currencyFormat(d.price)}
                 </div>
@@ -108,33 +130,39 @@ function Menu(props) {
       <div
         style={{
           display: "flex",
-          marginBottom: "10px",
-          maxWidth: "350px",
-          border: "1px solid black",
           padding: 0,
           margin: 0,
-          backgroundColor: "#424242"
+          marginBottom: "15px",
+          maxWidth: "425px",
+          alignItems: "center",
+          //border: "1px solid black",
+          backgroundColor: "#fff"
         }}
         key={"menu-item-" + key}
       >
-        <img
+        <LazyLoadImage
+          src={baseUrl + i.image}
+          alt={"image alt"}
+          effect="opacity"
+          delayTime={3000}
           style={{
             margin: 0,
             padding: 0,
             objectFit: "cover",
             objectPosition: "center",
-            maxWidth: "125px",
-            width: "25vw",
+            maxWidth: "145px",
+            width: "auto",
             height: "auto",
             aspectRatio: "1/1"
           }}
-          src={baseUrl + i.image}
         />
-        <div style={{ flexDirection: "column", padding: ".25rem" }}>
-          <h3 style={{ fontSize: ".90rem", color: "white" }}>
+        <div style={{ flexDirection: "column", padding: "5px" }}>
+          <h3
+            style={{ fontSize: "1.2rem", color: "black", fontWeight: "bold" }}
+          >
             {i.name} - (${i.price})
           </h3>
-          <div style={{ fontSize: ".70rem", color: "white" }}>
+          <div style={{ fontSize: "1rem", color: "black" }}>
             {i.subtext}
           </div>
         </div>
@@ -153,7 +181,8 @@ function Menu(props) {
           flexWrap: "wrap",
           justifyContent: "space-evenly",
           alignContent: "flex-start",
-          rowGap: "20px"
+          rowGap: "15px",
+          width: "100%"
         }}
       >
         {FullMenu}
@@ -180,4 +209,4 @@ function Menu(props) {
   );
 }
 
-export default Menu;
+export default trackWindowScroll(Menu);
