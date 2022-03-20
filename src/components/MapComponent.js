@@ -1,9 +1,106 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Geocode from "react-geocode";
 import truck_icon from "../images/food-truck.png";
+import { Card, CardBody, CardTitle, CardText } from "reactstrap";
+import {
+  BsFillArrowLeftSquareFill,
+  BsFillArrowRightSquareFill
+} from "react-icons/bs";
+import { Loading } from "./LoadingComponent";
+
 
 const red_marker = "https://maps.google.com/mapfiles/ms/icons/red.png";
+
+const ListItems = ({ history, historyIsLoading, errMess }) => {
+  if (historyIsLoading) {
+    return <div />;
+  }
+
+  if (history) {
+    return history.map(i => {
+      return (
+        <li key={"location-list-" + i.id}>
+          <Card className="ll-card">
+            <CardBody className="ll-card-body">
+              <CardTitle className="ll-card-title">
+                {i.title}
+              </CardTitle>
+              <CardText className="ll-card-text">
+                {i.address + "\n" + i.city + ", " + i.state + " " + i.zip}
+              </CardText>
+              <CardText className="ll-card-text">
+                {"Date: " + i.date}
+              </CardText>
+              <CardText className="ll-card-text">
+                {"Hours: " + i.hours}
+              </CardText>
+            </CardBody>
+          </Card>
+        </li>
+      );
+    });
+  }
+};
+
+const LocationList = props => {
+  const scrollRef = useRef();
+  const isScrollRef = useRef();
+  const scrollScale = 100;
+  const [bounceState, setBounce] = useState(0);
+
+  const setMove = scrollState => {
+    isScrollRef.current = scrollState;
+  };
+
+  const moveLeft = () => {
+    if (isScrollRef.current) {
+      scrollRef.current.scrollLeft += scrollScale;
+      requestAnimationFrame(moveLeft);
+    }
+  };
+
+  const moveRight = () => {
+    if (isScrollRef.current) {
+      scrollRef.current.scrollLeft -= scrollScale;
+      requestAnimationFrame(moveRight);
+    }
+  };
+
+  return (
+    <div className="location-list-container">
+      <button
+        className="prev"
+        onMouseDown={() => {
+          setMove(true);
+          moveRight();
+        }}
+        onMouseUp={() => setMove(false)}
+        onContextMenu={e => e.preventDefault()}
+      >
+        <BsFillArrowLeftSquareFill />
+      </button>
+      <ul ref={scrollRef}>
+        <ListItems
+          history={props.history}
+          historyIsLoading={props.historyLoading}
+          errMess={props.historyFailed}
+        />
+      </ul>
+      <button
+        className="next"
+        onMouseDown={() => {
+          setMove(true);
+          moveLeft();
+        }}
+        onMouseUp={() => setMove(false)}
+        onContextMenu={e => e.preventDefault()}
+      >
+        <BsFillArrowRightSquareFill />
+      </button>
+    </div>
+  );
+};
 
 const Map = props => {
   const defaultCenter = {
@@ -16,8 +113,7 @@ const Map = props => {
     streetViewControl: false,
     fullscreenControl: false,
     mapTypeControl: false,
-    gestureHandling: "none",
-    
+    gestureHandling: "none"
   };
 
   const { isLoaded } = useJsApiLoader({
@@ -65,26 +161,38 @@ const Map = props => {
   if (props.historyIsLoading || props.errMess) return <div />;
 
   return isLoaded
-    ? <GoogleMap
-        className="mx-auto"
-        mapContainerClassName="map"
-        zoom={9}
-        center={defaultCenter}
-        options={defaultOptions}
+    ? <div
+        style={{
+          width: "100vw",
+          maxWidth: "750px",
+          position: "relative",
+          boxShadow: "0px 0px 8px 0px #888888"
+        }}
       >
-        {locationData.map(item => {
-          let i = locationData.indexOf(item);
-          return (
-            <Marker
-              key={i}
-              icon={item.id === 0 ? truck_icon : red_marker}
-              position={item.position}
-              animation={props.bounce[i] ? 1 : 0}
-            />
-          );
-        })}
-      </GoogleMap>
-    : <div />;
+        <div>
+          <GoogleMap
+            className="mx-auto"
+            mapContainerClassName="map"
+            zoom={9}
+            center={defaultCenter}
+            options={defaultOptions}
+          >
+            {locationData.map(item => {
+              let i = locationData.indexOf(item);
+              return (
+                <Marker
+                  key={i}
+                  icon={item.id === 0 ? truck_icon : red_marker}
+                  position={item.position}
+                  animation={props.bounce[i] ? 1 : 0}
+                />
+              );
+            })}
+          </GoogleMap>
+        </div>
+        <LocationList props={props} />
+      </div>
+    : <Loading />;
 };
 
 export default Map;
