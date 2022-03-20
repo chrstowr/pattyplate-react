@@ -1,7 +1,12 @@
 import React from "react";
 import LocationList from "./LocationListComponent";
+import Map from "./MapComponent";
 import Menu from "./MenuComponent";
 import { Loading } from "./LoadingComponent";
+import RequestStop from "./RequestStopComponent";
+import About from "./AboutComponent";
+import { baseUrl } from "../shared/baseUrl";
+
 import logo from "../images/TBC-Logo.svg";
 
 function Home(props) {
@@ -33,13 +38,11 @@ function Home(props) {
     return <img className="logo" src={logo} alt="logo" />;
   };
 
-  return props.historyLoading
+  return props.historyLoading && props.menuLoading && props.ingredientLoading
     ? <Loading />
     : <div className="home-container">
-        <section id="top" className="section-0 sunset">
+        <section className="section-0" style={styles.section0background}>
           <div>
-            <Logo />
-            <NavBar style="header-navbar" />
           </div>
         </section>
         <section id="sec1" className="section-1 menu-svg">
@@ -55,25 +58,34 @@ function Home(props) {
           </div>
         </section>
         <section id="sec2" className="section-2 req-stop-svg">
-          <div>
-            <LocationList
+            <Map
               history={props.history}
               historyIsLoading={props.historyLoading}
               errMess={props.historyFailed}
             />
-          </div>
         </section>
         <section id="sec3" className="section-3">
           <div>
             <h1>Request a stop</h1>
+            <RequestStop />
           </div>
         </section>
         <section id="sec4" className="section-4">
           <div>
-            <h1>About us</h1>
+            <About />
           </div>
         </section>
       </div>;
 }
+
+const styles = {
+  section0background: {
+    backgroundImage: `url(${baseUrl + "images/burger.webp"})`,
+    height: "100vh",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    backgroundSize: "cover"
+  }
+};
 
 export default Home;
